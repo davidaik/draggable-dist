@@ -2730,10 +2730,12 @@ function moveWithinContainer(source, over) {
   var oldIndex = index(source);
   var newIndex = index(over);
 
-  if (oldIndex < newIndex) {
-    source.parentNode.insertBefore(source, over.nextElementSibling);
-  } else if (source.parentNode === over.parentNode) {
-    source.parentNode.insertBefore(source, over);
+  if (source.parentNode === over.parentNode) {
+    if (oldIndex < newIndex) {
+      source.parentNode.insertBefore(source, over.nextElementSibling);
+    } else {
+      source.parentNode.insertBefore(source, over);
+    }
   }
 
   return { oldContainer: source.parentNode, newContainer: source.parentNode };
