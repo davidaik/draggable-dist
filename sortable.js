@@ -5012,7 +5012,7 @@ function moveWithinContainer(source, over) {
 
   if (oldIndex < newIndex) {
     source.parentNode.insertBefore(source, over.nextElementSibling);
-  } else {
+  } else if (source.parentNode === over.parentNode) {
     source.parentNode.insertBefore(source, over);
   }
 
