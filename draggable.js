@@ -874,7 +874,7 @@ class Draggable {
     const allDraggableElements = container.querySelectorAll(this.options.draggable);
 
     return [...allDraggableElements].filter(childElement => {
-      return childElement !== this.originalSource && childElement !== this.mirror && childElement.parentNode === container;
+      return childElement !== this.originalSource && childElement !== this.mirror;
     });
   }
 

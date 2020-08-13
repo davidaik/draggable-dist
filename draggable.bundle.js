@@ -1934,7 +1934,21 @@ class Sortable extends _Draggable2.default {
    * @return {Number}
    */
   index(element) {
-    return this.getDraggableElementsForContainer(element.parentNode).indexOf(element);
+    return this.getSortableElementsForContainer(element.parentNode).indexOf(element);
+  }
+
+  /**
+   * Returns sortable elements for a given container, excluding the mirror and
+   * original source element if present
+   * @param {HTMLElement} container
+   * @return {HTMLElement[]}
+   */
+  getSortableElementsForContainer(container) {
+    const allSortableElements = container.querySelectorAll(this.options.draggable);
+
+    return [...allSortableElements].filter(childElement => {
+      return childElement !== this.originalSource && childElement !== this.mirror && childElement.parentNode === container;
+    });
   }
 
   /**
@@ -1985,7 +1999,7 @@ class Sortable extends _Draggable2.default {
       return;
     }
 
-    const children = this.getDraggableElementsForContainer(overContainer);
+    const children = this.getSortableElementsForContainer(overContainer);
     const moves = move({ source, over, overContainer, children });
 
     if (!moves) {
@@ -2082,7 +2096,7 @@ function index(element) {
 function move({ source, over, overContainer, children }) {
   const emptyOverContainer = !children.length;
   const differentContainer = source.parentNode !== overContainer;
-  const sameContainer = over && !differentContainer;
+  const sameContainer = over && source.parentNode === over.parentNode;
 
   if (emptyOverContainer) {
     return moveInsideEmptyContainer(source, overContainer);
@@ -2107,12 +2121,10 @@ function moveWithinContainer(source, over) {
   const oldIndex = index(source);
   const newIndex = index(over);
 
-  if (source.parentNode === over.parentNode) {
-    if (oldIndex < newIndex) {
-      source.parentNode.insertBefore(source, over.nextElementSibling);
-    } else {
-      source.parentNode.insertBefore(source, over);
-    }
+  if (oldIndex < newIndex) {
+    source.parentNode.insertBefore(source, over.nextElementSibling);
+  } else {
+    source.parentNode.insertBefore(source, over);
   }
 
   return { oldContainer: source.parentNode, newContainer: source.parentNode };
@@ -3634,7 +3646,7 @@ class Draggable {
     const allDraggableElements = container.querySelectorAll(this.options.draggable);
 
     return [...allDraggableElements].filter(childElement => {
-      return childElement !== this.originalSource && childElement !== this.mirror && childElement.parentNode === container;
+      return childElement !== this.originalSource && childElement !== this.mirror;
     });
   }
 

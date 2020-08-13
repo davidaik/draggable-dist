@@ -1954,7 +1954,7 @@ var Draggable = function () {
       var allDraggableElements = container.querySelectorAll(this.options.draggable);
 
       return [].concat((0, _toConsumableArray3.default)(allDraggableElements)).filter(function (childElement) {
-        return childElement !== _this5.originalSource && childElement !== _this5.mirror && childElement.parentNode === container;
+        return childElement !== _this5.originalSource && childElement !== _this5.mirror;
       });
     }
 
